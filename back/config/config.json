@@ -1,0 +1,25 @@
+
+ {
+  "development": {
+    "username": "postgres",
+    "password": "juan2006",
+    "database": "negocio",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "juan2006",
+    "database": "negocio",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "production": {
+   "username": "postgres",
+    "password": "juan2006",
+    "database": "negocio",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+  
+}
