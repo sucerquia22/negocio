@@ -1,7 +1,16 @@
 import { bootstrapApplication } from '@angular/platform-browser';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 import { AppComponent } from './app/app.component';
-import { config } from './app/app.config.server';
+import { routes } from './app/app.routes';
+import { SERVER_CONFIG } from './app/app.config.server';
 
-const bootstrap = () => bootstrapApplication(AppComponent, config);
-
-export default bootstrap;
+export default function bootstrap() {
+  return bootstrapApplication(AppComponent, {
+    providers: [
+      provideRouter(routes),
+      provideHttpClient(),
+      { provide: 'API_BASE_URL', useValue: SERVER_CONFIG.apiBaseUrl },
+    ],
+  });
+}

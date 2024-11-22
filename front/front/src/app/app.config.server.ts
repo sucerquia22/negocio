@@ -1,11 +1,16 @@
-import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
-import { provideServerRendering } from '@angular/platform-server';
-import { appConfig } from './app.config';
+import { ApplicationConfig } from '@angular/core';
 
+
+
+// Define primero `serverConfig`
 const serverConfig: ApplicationConfig = {
   providers: [
-    provideServerRendering()
-  ]
+    { provide: 'API_BASE_URL', useValue: 'http://localhost:3000/api' }, // URL del backend
+  ],
 };
 
-export const config = mergeApplicationConfig(appConfig, serverConfig);
+// Combina `serverConfig` con `appConfig`
+
+export const SERVER_CONFIG = {
+  apiBaseUrl: 'http://localhost:3000/api', // URL base del backend
+};

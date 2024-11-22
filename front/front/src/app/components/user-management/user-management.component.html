@@ -1,0 +1,83 @@
+<div class="container mt-4">
+  <h2>Gestión de Usuarios</h2>
+
+  <!-- Mostrar mensajes de éxito o error -->
+  <div *ngIf="mensajeExito" class="alert alert-success">{{ mensajeExito }}</div>
+  <div *ngIf="mensajeError" class="alert alert-danger">{{ mensajeError }}</div>
+
+  <!-- Tabla de usuarios -->
+  <table class="table mt-4">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nombre Completo</th>
+        <th>Nombre de Usuario</th>
+        <th>Rol</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usuario of usuarios; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ usuario.nombre_completo }}</td>
+        <td>{{ usuario.nombre_usuario }}</td>
+        <td>{{ usuario.rol }}</td>
+        <td>
+          <button class="btn btn-danger btn-sm" (click)="eliminarUsuario(usuario.id)">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Formulario para agregar un nuevo usuario -->
+  <div class="card mt-4">
+    <div class="card-body">
+      <h5 class="card-title">Agregar Nuevo Usuario</h5>
+      <form (ngSubmit)="agregarUsuario()">
+        <div class="mb-3">
+          <label for="nombre_completo" class="form-label">Nombre Completo</label>
+          <input
+            type="text"
+            id="nombre_completo"
+            class="form-control"
+            [(ngModel)]="nuevoUsuario.nombre_completo"
+            name="nombre_completo"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="nombre_usuario" class="form-label">Nombre de Usuario</label>
+          <input
+            type="text"
+            id="nombre_usuario"
+            class="form-control"
+            [(ngModel)]="nuevoUsuario.nombre_usuario"
+            name="nombre_usuario"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="contrasena" class="form-label">Contraseña</label>
+          <input
+            type="password"
+            id="contrasena"
+            class="form-control"
+            [(ngModel)]="nuevoUsuario.contrasena"
+            name="contrasena"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="rol" class="form-label">Rol</label>
+          <select id="rol" class="form-select" [(ngModel)]="nuevoUsuario.rol" name="rol">
+            <option value="Admin">Admin</option>
+            <option value="Personal">Personal</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar Usuario</button>
+      </form>
+    </div>
+  </div>
+</div>
