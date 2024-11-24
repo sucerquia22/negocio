@@ -1,8 +1,11 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Gestión de Tareas</a>
-    <div *ngIf="isLoggedIn" class="ml-auto">
-      <button class="btn btn-outline-danger" (click)="logout()">Cerrar Sesión</button>
-    </div>
+<div *ngIf="isLoggedIn; else loginTemplate">
+  <nav>
+    <button (click)="logout()">Cerrar Sesión</button>
   </nav>
-  <router-outlet></router-outlet>
-  
+</div>
+
+<ng-template #loginTemplate>
+  <p>Por favor, inicia sesión para continuar.</p>
+</ng-template>
+
+<router-outlet></router-outlet>

@@ -132,3 +132,20 @@ exports.filterTasks = async (req, res) => {
   }
 };
 
+exports.deleteTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const tarea = await Tareas.findByPk(id);
+    if (!tarea) {
+      return res.status(404).json({ message: 'Tarea no encontrada.' });
+    }
+
+    await tarea.destroy();
+    res.json({ message: 'Tarea eliminada exitosamente.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al eliminar la tarea.', error });
+  }
+};
+
+

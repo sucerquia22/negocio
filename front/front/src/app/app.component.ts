@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'; 
 import { RouterOutlet } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { CommonModule } from '@angular/common';
@@ -17,12 +17,30 @@ import { CommonModule } from '@angular/common';
 export class AppComponent {
   title = 'frontend';
 
+  ngOnInit() {
+    if (this.isBrowser()) {
+      const loggedIn = localStorage.getItem('isLoggedIn');
+      console.log('Estado de sesión:', loggedIn);
+    }
+  }
+
   get isLoggedIn(): boolean {
-    return !!localStorage.getItem('token'); // Devuelve true si el token existe
+    if (this.isBrowser()) {
+      return !!localStorage.getItem('token'); // Comprueba si existe el token
+    }
+    return false; // En SSR, asume que no está logueado
   }
 
   logout(): void {
-    localStorage.removeItem('token'); // Elimina el token
-    window.location.href = '/'; // Redirige al login
+    if (this.isBrowser()) {
+      localStorage.removeItem('token'); // Elimina el token
+      window.location.href = '/'; // Redirige al login
+    }
+  }
+
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && !!window.localStorage;
   }
 }
+
+

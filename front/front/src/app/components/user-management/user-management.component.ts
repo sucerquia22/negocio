@@ -9,13 +9,18 @@ import { SERVER_CONFIG } from '../../app.config.server';
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.css'],
-  imports: [CommonModule, FormsModule], // Incluye FormsModule y CommonModule
+  imports: [CommonModule, FormsModule],
 })
 export class UserManagementComponent implements OnInit {
   usuarios: any[] = [];
-  nuevoUsuario = { nombre_completo: '', nombre_usuario: '', contrasena: '', rol: 'Personal' };
-  mensajeError: string = '';
-  mensajeExito: string = '';
+  nuevoUsuario = {
+    nombre_completo: '',
+    nombre_usuario: '',
+    contrasena: '',
+    rol: 'Personal',
+  };
+  mensajeError = '';
+  mensajeExito = '';
 
   constructor(private http: HttpClient) {}
 
@@ -37,27 +42,25 @@ export class UserManagementComponent implements OnInit {
   agregarUsuario(): void {
     this.http.post(`${SERVER_CONFIG.apiBaseUrl}/usuarios`, this.nuevoUsuario).subscribe(
       () => {
-        this.mensajeExito = 'Usuario agregado correctamente.';
+        this.mensajeExito = 'Usuario agregado exitosamente.';
         this.cargarUsuarios();
         this.nuevoUsuario = { nombre_completo: '', nombre_usuario: '', contrasena: '', rol: 'Personal' };
       },
       () => {
-        this.mensajeError = 'Error al agregar el usuario.';
+        this.mensajeError = 'Error al agregar usuario.';
       }
     );
   }
 
   eliminarUsuario(id: number): void {
-    if (confirm('¿Está seguro de eliminar este usuario?')) {
-      this.http.delete(`${SERVER_CONFIG.apiBaseUrl}/usuarios/${id}`).subscribe(
-        () => {
-          this.mensajeExito = 'Usuario eliminado correctamente.';
-          this.cargarUsuarios();
-        },
-        () => {
-          this.mensajeError = 'Error al eliminar el usuario.';
-        }
-      );
-    }
+    this.http.delete(`${SERVER_CONFIG.apiBaseUrl}/usuarios/${id}`).subscribe(
+      () => {
+        this.mensajeExito = 'Usuario eliminado exitosamente.';
+        this.cargarUsuarios();
+      },
+      () => {
+        this.mensajeError = 'Error al eliminar usuario.';
+      }
+    );
   }
 }

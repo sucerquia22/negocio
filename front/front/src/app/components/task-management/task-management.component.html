@@ -1,26 +1,40 @@
 <div class="container mt-4">
   <h2>Gestión de Tareas</h2>
 
-  <!-- Mensajes de éxito o error -->
+  <!-- Mensajes -->
   <div *ngIf="mensajeExito" class="alert alert-success">{{ mensajeExito }}</div>
   <div *ngIf="mensajeError" class="alert alert-danger">{{ mensajeError }}</div>
 
-  <!-- Barra de progreso -->
-  <div class="progress my-4">
-    <div
-      class="progress-bar"
-      role="progressbar"
-      [style.width.%]="progreso"
-      [attr.aria-valuenow]="progreso"
-      aria-valuemin="0"
-      aria-valuemax="100"
-    >
-      {{ progreso }}%
+  <!-- Filtros -->
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Buscar por título"
+        [(ngModel)]="queryBusqueda"
+        (input)="cargarTareas()"
+      />
+    </div>
+    <div class="col-md-4">
+      <select
+        class="form-select"
+        [(ngModel)]="filtroEstado"
+        (change)="cargarTareas()"
+      >
+        <option value="">Todos los estados</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="En Progreso">En Progreso</option>
+        <option value="Completada">Completada</option>
+      </select>
+    </div>
+    <div class="col-md-4 text-end">
+      <button class="btn btn-secondary" (click)="limpiarFiltros()">Limpiar Filtros</button>
     </div>
   </div>
 
   <!-- Tabla de tareas -->
-  <table class="table mt-4" *ngIf="tareas.length > 0; else sinTareas">
+  <table class="table table-striped">
     <thead>
       <tr>
         <th>#</th>
@@ -33,52 +47,16 @@
     <tbody>
       <tr *ngFor="let tarea of tareas; let i = index">
         <td>{{ i + 1 }}</td>
-        <td>
-          <span *ngIf="tareaEditada?.id !== tarea.id">{{ tarea.titulo }}</span>
-          <input
-            *ngIf="tareaEditada?.id === tarea.id"
-            type="text"
-            [(ngModel)]="tareaEditada.titulo"
-            class="form-control"
-          />
-        </td>
-        <td>
-          <span *ngIf="tareaEditada?.id !== tarea.id">{{ tarea.descripcion }}</span>
-          <textarea
-            *ngIf="tareaEditada?.id === tarea.id"
-            [(ngModel)]="tareaEditada.descripcion"
-            class="form-control"
-          ></textarea>
-        </td>
+        <td>{{ tarea.titulo }}</td>
+        <td>{{ tarea.descripcion }}</td>
         <td>{{ tarea.estado }}</td>
         <td>
           <button
-            *ngIf="tareaEditada?.id !== tarea.id && tarea.estado !== 'Completada'"
-            class="btn btn-success btn-sm me-2"
+            class="btn btn-success btn-sm"
             (click)="marcarCompletada(tarea.id)"
+            *ngIf="tarea.estado !== 'Completada'"
           >
-            Marcar Completada
-          </button>
-          <button
-            *ngIf="tareaEditada?.id !== tarea.id"
-            class="btn btn-primary btn-sm me-2"
-            (click)="editarTarea(tarea)"
-          >
-            Editar
-          </button>
-          <button
-            *ngIf="tareaEditada?.id === tarea.id"
-            class="btn btn-success btn-sm me-2"
-            (click)="guardarEdicion()"
-          >
-            Guardar
-          </button>
-          <button
-            *ngIf="tareaEditada?.id === tarea.id"
-            class="btn btn-secondary btn-sm me-2"
-            (click)="cancelarEdicion()"
-          >
-            Cancelar
+            Marcar como Completada
           </button>
           <button class="btn btn-danger btn-sm" (click)="eliminarTarea(tarea.id)">
             Eliminar
@@ -87,9 +65,4 @@
       </tr>
     </tbody>
   </table>
-
-  <!-- Plantilla alternativa cuando no hay tareas -->
-  <ng-template #sinTareas>
-    <p class="text-muted">No hay tareas asignadas.</p>
-  </ng-template>
 </div>
