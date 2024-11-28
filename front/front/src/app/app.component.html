@@ -1,11 +1,7 @@
-<div *ngIf="isLoggedIn; else loginTemplate">
-  <nav>
-    <button (click)="logout()">Cerrar Sesión</button>
-  </nav>
+<div *ngIf="!isLoggedIn">
+  <app-login></app-login>
 </div>
-
-<ng-template #loginTemplate>
-  <p>Por favor, inicia sesión para continuar.</p>
-</ng-template>
-
-<router-outlet></router-outlet>
+<div *ngIf="isLoggedIn">
+  <app-admin-dashboard *ngIf="userRole === 'Admin'"></app-admin-dashboard>
+  <app-user-dashboard *ngIf="userRole === 'personal'"></app-user-dashboard>
+</div>

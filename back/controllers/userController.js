@@ -1,36 +1,50 @@
-const bcrypt = require('bcryptjs');
-const { Usuarios, Negocios } = require('../models');
+const { Usuarios } = require('../models');
 
-// Crear un usuario y asignarlo a un negocio
-exports.createUser = async (req, res) => {
+// Registrar un nuevo usuario
+exports.registrarUsuario = async (req, res) => {
   try {
-    const { nombre_completo, nombre_usuario, contrasena, rol, negocio_id } = req.body;
+    const { nombreCompleto, nombreUsuario, contrasena, negocioId } = req.body;
 
-    // Hashear la contraseña antes de guardarla
-    const contrasena_hash = await bcrypt.hash(contrasena, 10);
-
-    const nuevoUsuario = await Usuarios.create({
-      nombre_completo,
-      nombre_usuario,
-      contrasena_hash,
-      rol,
-      negocio_id
+    const usuario = await Usuarios.create({
+      nombreCompleto,
+      nombreUsuario,
+      contrasena,
+      negocioId,
+      rol: 'personal',
     });
 
-    res.status(201).json({ message: 'Usuario creado exitosamente', usuario: nuevoUsuario });
+    res.status(201).json({ message: 'Usuario registrado exitosamente', usuario });
   } catch (error) {
-    res.status(500).json({ message: 'Error al crear el usuario', error });
+    console.error('Error al registrar usuario:', error);
+    res.status(500).json({ message: 'Error en el servidor' });
   }
 };
 
-// Obtener todos los usuarios de un negocio
-exports.getUsersByBusiness = async (req, res) => {
+// Obtener todos los usuarios
+exports.obtenerUsuarios = async (req, res) => {
   try {
-    const { negocio_id } = req.params;
-
-    const usuarios = await Usuarios.findAll({ where: { negocio_id } });
+    const usuarios = await Usuarios.findAll();
     res.json({ usuarios });
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener los usuarios', error });
+    console.error('Error al obtener usuarios:', error);
+    res.status(500).json({ message: 'Error en el servidor' });
+  }
+};
+
+// Eliminar un usuario
+exports.eliminarUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const usuario = await Usuarios.findByPk(id);
+
+    if (!usuario) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    await usuario.destroy();
+    res.json({ message: 'Usuario eliminado exitosamente' });
+  } catch (error) {
+    console.error('Error al eliminar usuario:', error);
+    res.status(500).json({ message: 'Error en el servidor' });
   }
 };

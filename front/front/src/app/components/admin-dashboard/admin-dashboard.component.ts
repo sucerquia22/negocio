@@ -1,39 +1,22 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Router, RouterModule } from '@angular/router'; // Importa Router y RouterModule
 import { CommonModule } from '@angular/common';
-import { SERVER_CONFIG } from '../../app.config.server';
-
-
 
 @Component({
   standalone: true,
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css'],
-  imports: [CommonModule], // Necesario para plantillas
+  imports: [CommonModule, RouterModule], // Agrega RouterModule aquí
 })
 export class AdminDashboardComponent {
-  negocios: any[] = []; // Lista de negocios con tareas
+  constructor(private router: Router) {}
 
-  constructor(private http: HttpClient) {}
-
-  ngOnInit(): void {
-    this.cargarResumenNegocios();
+  goToTasks(negocioId: number) {
+    this.router.navigate(['/tareas', negocioId]);
   }
 
-  cargarResumenNegocios(): void {
-    this.http
-      .get('http://localhost:3000/api/dashboard/admin') // Reemplaza con SERVER_CONFIG si aplica
-      .subscribe((data: any) => {
-        this.negocios = data.tareasPorNegocio;
-      });
-  }
-
-  irGestionUsuarios(): void {
-    console.log('Ir a Gestión de Usuarios');
-  }
-
-  irGestionTareas(): void {
-    console.log('Ir a Gestión de Tareas');
+  goToUsers() {
+    this.router.navigate(['/usuarios']);
   }
 }

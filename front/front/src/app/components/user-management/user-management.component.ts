@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { SERVER_CONFIG } from '../../app.config.server';
 
 @Component({
@@ -9,58 +9,26 @@ import { SERVER_CONFIG } from '../../app.config.server';
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.css'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule], // Asegurarse de importar CommonModule y FormsModule
 })
-export class UserManagementComponent implements OnInit {
-  usuarios: any[] = [];
-  nuevoUsuario = {
-    nombre_completo: '',
-    nombre_usuario: '',
-    contrasena: '',
-    rol: 'Personal',
-  };
-  mensajeError = '';
-  mensajeExito = '';
+export class UserManagementComponent {
+  negocioId!: number;
+  usuarios: { nombreCompleto: string; nombreUsuario: string; contrasena: string }[] = [];
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit(): void {
-    this.cargarUsuarios();
+  addUser() {
+    this.usuarios.push({ nombreCompleto: '', nombreUsuario: '', contrasena: '' });
   }
 
-  cargarUsuarios(): void {
-    this.http.get(`${SERVER_CONFIG.apiBaseUrl}/usuarios`).subscribe(
-      (response: any) => {
-        this.usuarios = response.usuarios;
-      },
-      () => {
-        this.mensajeError = 'Error al cargar usuarios.';
-      }
-    );
+  removeUser(index: number) {
+    this.usuarios.splice(index, 1);
   }
 
-  agregarUsuario(): void {
-    this.http.post(`${SERVER_CONFIG.apiBaseUrl}/usuarios`, this.nuevoUsuario).subscribe(
-      () => {
-        this.mensajeExito = 'Usuario agregado exitosamente.';
-        this.cargarUsuarios();
-        this.nuevoUsuario = { nombre_completo: '', nombre_usuario: '', contrasena: '', rol: 'Personal' };
-      },
-      () => {
-        this.mensajeError = 'Error al agregar usuario.';
-      }
-    );
-  }
-
-  eliminarUsuario(id: number): void {
-    this.http.delete(`${SERVER_CONFIG.apiBaseUrl}/usuarios/${id}`).subscribe(
-      () => {
-        this.mensajeExito = 'Usuario eliminado exitosamente.';
-        this.cargarUsuarios();
-      },
-      () => {
-        this.mensajeError = 'Error al eliminar usuario.';
-      }
-    );
+  confirmUsers() {
+    this.http.post(`${SERVER_CONFIG.apiBaseUrl}/usuarios`, {
+      negocioId: this.negocioId,
+      usuarios: this.usuarios,
+    }).subscribe(() => alert('Usuarios guardados correctamente.'));
   }
 }

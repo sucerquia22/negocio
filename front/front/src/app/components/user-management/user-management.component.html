@@ -1,55 +1,21 @@
-<div>
+<div class="user-container">
   <h2>Gestión de Usuarios</h2>
+  <select [(ngModel)]="negocioId">
+    <option [value]="1">Negocio 1</option>
+    <option [value]="2">Negocio 2</option>
+    <option [value]="3">Negocio 3</option>
+  </select>
 
-  <!-- Mensajes de éxito y error -->
-  <div *ngIf="mensajeExito" class="alert alert-success">{{ mensajeExito }}</div>
-  <div *ngIf="mensajeError" class="alert alert-danger">{{ mensajeError }}</div>
+  <button class="btn btn-add" (click)="addUser()">+</button>
 
-  <!-- Formulario para agregar usuario -->
-  <form (ngSubmit)="agregarUsuario()">
-    <div class="form-group">
-      <label>Nombre Completo:</label>
-      <input [(ngModel)]="nuevoUsuario.nombre_completo" name="nombre_completo" class="form-control" required />
-    </div>
-    <div class="form-group">
-      <label>Nombre de Usuario:</label>
-      <input [(ngModel)]="nuevoUsuario.nombre_usuario" name="nombre_usuario" class="form-control" required />
-    </div>
-    <div class="form-group">
-      <label>Contraseña:</label>
-      <input [(ngModel)]="nuevoUsuario.contrasena" name="contrasena" type="password" class="form-control" required />
-    </div>
-    <div class="form-group">
-      <label>Rol:</label>
-      <select [(ngModel)]="nuevoUsuario.rol" name="rol" class="form-control">
-        <option value="Personal">Personal</option>
-        <option value="Admin">Admin</option>
-      </select>
-    </div>
-    <button type="submit" class="btn btn-primary mt-2">Agregar Usuario</button>
-  </form>
+  <div *ngFor="let usuario of usuarios; index as i" class="user">
+    <input [(ngModel)]="usuario.nombreCompleto" placeholder="Nombre Completo" />
+    <input [(ngModel)]="usuario.nombreUsuario" placeholder="Usuario" />
+    <input [(ngModel)]="usuario.contrasena" placeholder="Contraseña" type="password" />
+    <button class="btn btn-edit">✏️</button>
+    <button class="btn btn-delete" (click)="removeUser(i)">🗑️</button>
+    <button class="btn btn-save">✔️</button>
+  </div>
 
-  <!-- Tabla de usuarios -->
-  <table class="table mt-4">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Nombre Completo</th>
-        <th>Usuario</th>
-        <th>Rol</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let usuario of usuarios; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ usuario.nombre_completo }}</td>
-        <td>{{ usuario.nombre_usuario }}</td>
-        <td>{{ usuario.rol }}</td>
-        <td>
-          <button (click)="eliminarUsuario(usuario.id)" class="btn btn-danger btn-sm">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <button class="btn btn-confirm" (click)="confirmUsers()">Confirmar</button>
 </div>

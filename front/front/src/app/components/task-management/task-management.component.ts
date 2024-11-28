@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 import { SERVER_CONFIG } from '../../app.config.server';
 
 @Component({
@@ -9,68 +10,30 @@ import { SERVER_CONFIG } from '../../app.config.server';
   selector: 'app-task-management',
   templateUrl: './task-management.component.html',
   styleUrls: ['./task-management.component.css'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule], // Asegurarse de importar CommonModule y FormsModule
 })
-export class TaskManagementComponent implements OnInit {
-  tareas: any[] = [];
-  filtroEstado = '';
-  queryBusqueda = '';
-  mensajeError = '';
-  mensajeExito = '';
+export class TaskManagementComponent {
+  negocioId!: number;
+  tareas: { titulo: string; descripcion: string }[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
-  ngOnInit(): void {
-    this.cargarTareas();
+  ngOnInit() {
+    this.negocioId = +this.route.snapshot.paramMap.get('negocioId')!;
   }
 
-  cargarTareas(): void {
-    let url = `${SERVER_CONFIG.apiBaseUrl}/tareas/filtrar`;
-    const params: any = {};
-    if (this.filtroEstado) params.estado = this.filtroEstado;
-    if (this.queryBusqueda) params.query = this.queryBusqueda;
-
-    this.http.get(url, { params }).subscribe(
-      (response: any) => {
-        this.tareas = response.tareas;
-      },
-      () => {
-        this.mensajeError = 'Error al cargar tareas.';
-      }
-    );
+  addTask() {
+    this.tareas.push({ titulo: '', descripcion: '' });
   }
 
-  limpiarFiltros(): void {
-    this.filtroEstado = '';
-    this.queryBusqueda = '';
-    this.cargarTareas();
+  removeTask(index: number) {
+    this.tareas.splice(index, 1);
   }
 
-  marcarCompletada(tareaId: number): void {
-    this.http
-      .put(`${SERVER_CONFIG.apiBaseUrl}/tareas/marcar-completada`, {
-        tarea_id: tareaId,
-      })
-      .subscribe(
-        () => {
-          this.mensajeExito = 'Tarea marcada como completada.';
-          this.cargarTareas();
-        },
-        () => {
-          this.mensajeError = 'Error al marcar la tarea como completada.';
-        }
-      );
-  }
-
-  eliminarTarea(tareaId: number): void {
-    this.http.delete(`${SERVER_CONFIG.apiBaseUrl}/tareas/${tareaId}`).subscribe(
-      () => {
-        this.mensajeExito = 'Tarea eliminada exitosamente.';
-        this.cargarTareas();
-      },
-      () => {
-        this.mensajeError = 'Error al eliminar la tarea.';
-      }
-    );
+  confirmTasks() {
+    this.http.post(`${SERVER_CONFIG.apiBaseUrl}/tareas`, {
+      negocioId: this.negocioId,
+      tareas: this.tareas,
+    }).subscribe(() => alert('Tareas guardadas correctamente.'));
   }
 }

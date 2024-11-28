@@ -1,13 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const taskController = require('../controllers/taskController');
-const verifyToken = require('../middlewares/authMiddleware');
+const taskController = require('../controllers/taskController'); // Importa el controlador
 
-// Rutas para la gestión de tareas
-router.post('/asignar', verifyToken, taskController.assignTaskToUser);
-router.get('/usuario/:usuario_id/asignadas', verifyToken, taskController.getAssignedTasks);
-router.put('/marcar-completada', verifyToken, taskController.markTaskAsCompleted);
-router.get('/:tarea_id/historial', verifyToken, taskController.getTaskHistory);
-router.get('/filtrar', verifyToken, taskController.filterTasks);
+// Definir rutas
+router.post('/', taskController.crearTarea); // Crear tarea
+router.get('/:negocioId', taskController.obtenerTareasPorNegocio); // Obtener tareas por negocio
+router.delete('/:id', taskController.eliminarTarea); // Eliminar tarea
 
 module.exports = router;

@@ -1,7 +1,12 @@
-import { Component } from '@angular/core'; 
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common'; // Importa CommonModule
 import { LoginComponent } from './components/login/login.component';
-import { CommonModule } from '@angular/common';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { UserDashboardComponent } from './components/user-dashboard/user-dashboard.component';
+import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router'; 
+import { StorageUtils } from './utils/storage.utils';
+
 
 @Component({
   standalone: true,
@@ -9,38 +14,36 @@ import { CommonModule } from '@angular/common';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   imports: [
-    RouterOutlet,
-    LoginComponent,
-    CommonModule, // Importa CommonModule para usar *ngIf
+    CommonModule,
+    RouterModule, // Importa RouterModule
+    LoginComponent, // Asegúrate de que es standalone
+    AdminDashboardComponent,
+    UserDashboardComponent,
   ],
 })
 export class AppComponent {
-  title = 'frontend';
+  isLoggedIn = false;
+  userRole: string | null = null;
+
+  constructor(private router: Router) {}
+
+  private checkLocalStorage(): boolean {
+    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  }
 
   ngOnInit() {
-    if (this.isBrowser()) {
-      const loggedIn = localStorage.getItem('isLoggedIn');
-      console.log('Estado de sesión:', loggedIn);
+    const token = StorageUtils.getItem('token');
+    const role = StorageUtils.getItem('role');
+    if (token && role) {
+      this.isLoggedIn = true;
+      this.userRole = role;
     }
   }
 
-  get isLoggedIn(): boolean {
-    if (this.isBrowser()) {
-      return !!localStorage.getItem('token'); // Comprueba si existe el token
-    }
-    return false; // En SSR, asume que no está logueado
-  }
-
-  logout(): void {
-    if (this.isBrowser()) {
-      localStorage.removeItem('token'); // Elimina el token
-      window.location.href = '/'; // Redirige al login
-    }
-  }
-
-  private isBrowser(): boolean {
-    return typeof window !== 'undefined' && !!window.localStorage;
+  logout() {
+    StorageUtils.clear();
+    this.isLoggedIn = false;
+    this.userRole = null;
+    this.router.navigate(['/']);
   }
 }
-
-

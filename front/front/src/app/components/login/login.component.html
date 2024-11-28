@@ -1,31 +1,27 @@
-<div class="login-container">
+¿<div class="login-container">
   <h2>Iniciar Sesión</h2>
-  <form (ngSubmit)="login()">
-    <div class="mb-3">
-      <label for="nombre_usuario" class="form-label">Usuario</label>
+  <form (ngSubmit)="onSubmit()">
+    <div>
+      <label for="usuario">Usuario:</label>
       <input
+        id="usuario"
         type="text"
-        id="nombre_usuario"
-        class="form-control"
-        [(ngModel)]="nombre_usuario"
-        name="nombre_usuario"
+        [(ngModel)]="nombreUsuario"
+        name="usuario"
         required
       />
     </div>
-    <div class="mb-3">
-      <label for="contrasena" class="form-label">Contraseña</label>
+    <div>
+      <label for="contrasena">Contraseña:</label>
       <input
-        type="password"
         id="contrasena"
-        class="form-control"
+        type="password"
         [(ngModel)]="contrasena"
         name="contrasena"
         required
       />
     </div>
-    <div *ngIf="mensajeError" class="alert alert-danger">
-      {{ mensajeError }}
-    </div>
-    <button type="submit" class="btn btn-primary">Ingresar</button>
+    <button type="submit">Iniciar Sesión</button>
+    <div *ngIf="mensajeError" class="error">{{ mensajeError }}</div>
   </form>
 </div>

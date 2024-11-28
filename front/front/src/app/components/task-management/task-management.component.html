@@ -1,68 +1,13 @@
-<div class="container mt-4">
+<div class="task-container">
   <h2>Gestión de Tareas</h2>
+  <button class="btn btn-add" (click)="addTask()">+</button>
 
-  <!-- Mensajes -->
-  <div *ngIf="mensajeExito" class="alert alert-success">{{ mensajeExito }}</div>
-  <div *ngIf="mensajeError" class="alert alert-danger">{{ mensajeError }}</div>
-
-  <!-- Filtros -->
-  <div class="row mb-3">
-    <div class="col-md-4">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Buscar por título"
-        [(ngModel)]="queryBusqueda"
-        (input)="cargarTareas()"
-      />
-    </div>
-    <div class="col-md-4">
-      <select
-        class="form-select"
-        [(ngModel)]="filtroEstado"
-        (change)="cargarTareas()"
-      >
-        <option value="">Todos los estados</option>
-        <option value="Pendiente">Pendiente</option>
-        <option value="En Progreso">En Progreso</option>
-        <option value="Completada">Completada</option>
-      </select>
-    </div>
-    <div class="col-md-4 text-end">
-      <button class="btn btn-secondary" (click)="limpiarFiltros()">Limpiar Filtros</button>
-    </div>
+  <div *ngFor="let tarea of tareas; index as i" class="task">
+    <input [(ngModel)]="tarea.titulo" placeholder="Escribe la tarea" />
+    <button class="btn btn-edit">✏️</button>
+    <button class="btn btn-delete" (click)="removeTask(i)">🗑️</button>
+    <button class="btn btn-save">✔️</button>
   </div>
 
-  <!-- Tabla de tareas -->
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Título</th>
-        <th>Descripción</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let tarea of tareas; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ tarea.titulo }}</td>
-        <td>{{ tarea.descripcion }}</td>
-        <td>{{ tarea.estado }}</td>
-        <td>
-          <button
-            class="btn btn-success btn-sm"
-            (click)="marcarCompletada(tarea.id)"
-            *ngIf="tarea.estado !== 'Completada'"
-          >
-            Marcar como Completada
-          </button>
-          <button class="btn btn-danger btn-sm" (click)="eliminarTarea(tarea.id)">
-            Eliminar
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <button class="btn btn-confirm" (click)="confirmTasks()">Confirmar</button>
 </div>

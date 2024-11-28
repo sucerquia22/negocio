@@ -1,21 +1,21 @@
-'use strict';
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Negocios extends Model {
-    static associate(models) {
-      // Relación con Usuarios y Tareas
-      Negocios.hasMany(models.Usuarios, { foreignKey: 'negocio_id' });
-      Negocios.hasMany(models.Tareas, { foreignKey: 'negocio_id' });
-    }
-  }
+  class Negocios extends Model {}
 
-  Negocios.init({
-    nombre: { type: DataTypes.STRING, allowNull: false, unique: true },
-  }, {
-    sequelize,
-    modelName: 'Negocios',
-  });
+  Negocios.init(
+    {
+      nombre: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Negocios',
+      tableName: 'negocios', // Nombre de la tabla en la base de datos
+    }
+  );
 
   return Negocios;
 };

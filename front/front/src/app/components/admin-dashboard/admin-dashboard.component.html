@@ -1,6 +1,7 @@
-<div class="container">
-  <h2>Panel de Administración</h2>
-  <p>Bienvenido al panel de administración.</p>
-  <a routerLink="/usuarios" class="btn btn-primary">Gestionar Usuarios</a>
-  <a routerLink="/tareas" class="btn btn-secondary">Gestionar Tareas</a>
+<div class="dashboard-container">
+  <h2>Admin Dashboard</h2>
+  <button class="btn" (click)="goToTasks(1)" routerLink="/task-container">Negocio 1</button>
+  <button class="btn" (click)="goToTasks(2)">Negocio 2</button>
+  <button class="btn" (click)="goToTasks(3)">Negocio 3</button>
+  <button class="btn btn-users" (click)="goToUsers()">Usuarios</button>
 </div>

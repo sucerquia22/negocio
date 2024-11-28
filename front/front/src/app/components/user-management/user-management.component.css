@@ -1,8 +1,20 @@
-.is-invalid {
-    border-color: #dc3545;
-  }
-  
-  .text-danger {
-    font-size: 0.875em;
-  }
-  
+.user-container {
+  text-align: center;
+}
+
+.btn {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.user {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+input {
+  margin-right: 10px;
+  padding: 5px;
+}

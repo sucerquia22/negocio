@@ -1,46 +1,49 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // Importa CommonModule
-import { SERVER_CONFIG } from '../../app.config.server';
+import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [FormsModule, CommonModule], // Incluye CommonModule
+  imports: [CommonModule, FormsModule, HttpClientModule], // Asegúrate de incluir FormsModule y CommonModule
 })
 export class LoginComponent {
-  nombre_usuario = '';
-  contrasena = '';
-  mensajeError = '';
+  nombreUsuario: string = '';
+  contrasena: string = '';
+  mensajeError: string = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private router: Router) {}
 
-  login() {
-    this.mensajeError = ''; // Resetear mensaje de error
+  onSubmit() {
+    // Lógica para manejar el inicio de sesión
+  }
 
+  iniciarSesion(): void {
     this.http
-      .post(`${SERVER_CONFIG.apiBaseUrl}/auth/login`, {
-        nombre_usuario: this.nombre_usuario,
+      .post('http://localhost:3000/api/auth/login', {
+        nombre_usuario: this.nombreUsuario,
         contrasena: this.contrasena,
       })
       .subscribe(
         (response: any) => {
-          localStorage.setItem('token', response.token);
-          if (response.rol === 'Admin') {
-            this.router.navigate(['/admin']);
-          } else if (response.rol === 'Personal') {
-            this.router.navigate(['/tareas']);
-          } else {
-            this.mensajeError = 'Rol desconocido.';
+          if (response.usuario.rol === 'admin') {
+            this.router.navigate(['/admin-dashboard']);
+          } else if (response.usuario.rol === 'personal') {
+            this.router.navigate(['/user-dashboard']);
           }
+          localStorage.setItem('token', response.token);
         },
-        () => {
-          this.mensajeError = 'Credenciales incorrectas. Inténtalo nuevamente.';
+        (error) => {
+          this.mensajeError = error.error.message || 'Error al iniciar sesión.';
         }
       );
   }
 }
+
+
+
+

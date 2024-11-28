@@ -1,1 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+.container {
+    margin: auto;
+    padding: 20px;
+    max-width: 600px;
+    text-align: center;
+  }
+  
+  .error {
+    color: red;
+  }
+  
+  .success {
+    color: green;
+  }
+  
+  button {
+    margin: 5px;
+    padding: 10px;
+  }
+  

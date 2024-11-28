@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { SERVER_CONFIG } from '../../app.config.server';
 
 @Component({
@@ -9,51 +8,44 @@ import { SERVER_CONFIG } from '../../app.config.server';
   selector: 'app-user-dashboard',
   templateUrl: './user-dashboard.component.html',
   styleUrls: ['./user-dashboard.component.css'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule],
 })
 export class UserDashboardComponent implements OnInit {
-  tareas: any[] = [];
-  usuarioId = 1; // Reemplazar con el ID del usuario autenticado
-  mensajeExito = '';
-  mensajeError = '';
+  nombreUsuario = '';
+  fotoUsuario = '';
+  tareasCompletadas: any[] = [];
+  tareasPendientes: any[] = [];
   progreso = 0;
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
+    this.cargarInformacionUsuario();
     this.cargarTareas();
   }
 
+  cargarInformacionUsuario(): void {
+    const token = localStorage.getItem('token');
+    this.http.get(`${SERVER_CONFIG.apiBaseUrl}/usuarios/perfil`, { headers: { Authorization: `Bearer ${token}` } })
+      .subscribe((response: any) => {
+        this.nombreUsuario = response.nombre_completo;
+        this.fotoUsuario = response.foto_url;
+      });
+  }
+
   cargarTareas(): void {
-    const url = `${SERVER_CONFIG.apiBaseUrl}/tareas/usuario/${this.usuarioId}`;
-    this.http.get(url).subscribe(
-      (response: any) => {
-        this.tareas = response.tareas;
+    const token = localStorage.getItem('token');
+    this.http.get(`${SERVER_CONFIG.apiBaseUrl}/tareas/asignadas`, { headers: { Authorization: `Bearer ${token}` } })
+      .subscribe((response: any) => {
+        this.tareasCompletadas = response.tareas.filter((tarea: any) => tarea.estado === 'Completada');
+        this.tareasPendientes = response.tareas.filter((tarea: any) => tarea.estado === 'Pendiente');
         this.calcularProgreso();
-      },
-      () => {
-        this.mensajeError = 'Error al cargar tareas.';
-      }
-    );
+      });
   }
 
   calcularProgreso(): void {
-    const totalTareas = this.tareas.length;
-    const tareasCompletadas = this.tareas.filter((tarea) => tarea.estado === 'Completada').length;
-    this.progreso = totalTareas > 0 ? Math.round((tareasCompletadas / totalTareas) * 100) : 0;
-  }
-
-  marcarCompletada(tareaId: number): void {
-    this.http
-      .put(`${SERVER_CONFIG.apiBaseUrl}/tareas/marcar-completada`, { tarea_id: tareaId, usuario_id: this.usuarioId })
-      .subscribe(
-        () => {
-          this.mensajeExito = 'Tarea marcada como completada.';
-          this.cargarTareas();
-        },
-        () => {
-          this.mensajeError = 'Error al marcar la tarea como completada.';
-        }
-      );
+    const total = this.tareasPendientes.length + this.tareasCompletadas.length;
+    const completadas = this.tareasCompletadas.length;
+    this.progreso = total > 0 ? (completadas / total) * 100 : 0;
   }
 }

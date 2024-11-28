@@ -1,59 +1,38 @@
-const { Negocios, Usuarios } = require('../models');
+const { Negocios } = require('../models'); // Asegúrate de que el modelo Negocios está correctamente configurado
+
+// Obtener todos los negocios
+exports.obtenerNegocios = async (req, res) => {
+  try {
+    const negocios = await Negocios.findAll();
+    res.status(200).json({ negocios });
+  } catch (error) {
+    console.error('Error al obtener negocios:', error);
+    res.status(500).json({ message: 'Error al obtener negocios', error });
+  }
+};
 
 // Crear un nuevo negocio
-exports.createBusiness = async (req, res) => {
-  try {
-    const { nombre } = req.body;
+exports.crearNegocio = async (req, res) => {
+  const { nombre } = req.body;
 
+  try {
     const nuevoNegocio = await Negocios.create({ nombre });
     res.status(201).json({ message: 'Negocio creado exitosamente', negocio: nuevoNegocio });
   } catch (error) {
-    res.status(500).json({ message: 'Error al crear el negocio', error });
+    console.error('Error al crear negocio:', error);
+    res.status(500).json({ message: 'Error al crear negocio', error });
   }
 };
 
-// Obtener todos los negocios
-exports.getAllBusinesses = async (req, res) => {
+// Eliminar un negocio por ID
+exports.eliminarNegocio = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const negocios = await Negocios.findAll();
-    res.json({ negocios });
+    await Negocios.destroy({ where: { id } });
+    res.status(200).json({ message: 'Negocio eliminado exitosamente' });
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener los negocios', error });
-  }
-};
-
-// Actualizar un negocio
-exports.updateBusiness = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { nombre } = req.body;
-
-    const negocio = await Negocios.findByPk(id);
-    if (!negocio) {
-      return res.status(404).json({ message: 'Negocio no encontrado.' });
-    }
-
-    negocio.nombre = nombre;
-    await negocio.save();
-
-    res.json({ message: 'Negocio actualizado exitosamente', negocio });
-  } catch (error) {
-    res.status(500).json({ message: 'Error al actualizar el negocio', error });
-  }
-};
-
-// Eliminar un negocio
-exports.deleteBusiness = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const result = await Negocios.destroy({ where: { id } });
-    if (result === 0) {
-      return res.status(404).json({ message: 'Negocio no encontrado.' });
-    }
-
-    res.json({ message: 'Negocio eliminado exitosamente' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error al eliminar el negocio', error });
+    console.error('Error al eliminar negocio:', error);
+    res.status(500).json({ message: 'Error al eliminar negocio', error });
   }
 };

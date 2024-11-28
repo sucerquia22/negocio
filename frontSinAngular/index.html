@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Negocios</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Login Section -->
+  <div id="login-section">
+    <h1>Iniciar Sesión</h1>
+    <input type="text" id="username" placeholder="Nombre de usuario">
+    <input type="password" id="password" placeholder="Contraseña">
+    <button id="login-button">Iniciar Sesión</button>
+    <div id="error-message" class="hidden"></div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="admin-dashboard" class="hidden">
+    <h1>Dashboard Administrador</h1>
+    <button onclick="goToTasks(1)">Negocio 1</button>
+    <button onclick="goToTasks(2)">Negocio 2</button>
+    <button onclick="goToTasks(3)">Negocio 3</button>
+    <button onclick="goToUsers()">Gestión de Usuarios</button>
+    <button onclick="logout()">Cerrar Sesión</button>
+  </div>
+
+  <!-- Task Management -->
+  <div id="task-management" class="hidden">
+    <h1>Gestión de Tareas</h1>
+    <button id="add-task-button">+</button>
+    <div id="tasks-container"></div>
+    <button id="confirm-tasks-button">Confirmar</button>
+    <button onclick="goBack()">Volver</button>
+  </div>
+
+  <!-- User Dashboard -->
+  <div id="user-dashboard" class="hidden">
+    <div id="user-info">
+      <img id="user-photo" alt="Foto del usuario" />
+      <h1 id="user-name"></h1>
+    </div>
+    <div id="progress-container">
+      <h2>Progreso: <span id="progress-percent">0%</span></h2>
+      <div id="progress-bar">
+        <div id="progress-bar-filled"></div>
+      </div>
+    </div>
+    <div id="tasks-section">
+      <h2>Tareas Pendientes</h2>
+      <div id="pending-tasks"></div>
+      <h2>Tareas Completadas</h2>
+      <div id="completed-tasks"></div>
+    </div>
+    <button onclick="logout()">Cerrar Sesión</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

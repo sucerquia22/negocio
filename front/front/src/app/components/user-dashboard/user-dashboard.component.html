@@ -1,51 +1,21 @@
-<div>
-  <h2>Panel de Usuario</h2>
+<div class="user-dashboard">
+  <h2>{{ nombreUsuario }}</h2>
+  <img [src]="fotoUsuario" alt="Foto del usuario" />
 
-  <!-- Mensajes de éxito y error -->
-  <div *ngIf="mensajeExito" class="alert alert-success">{{ mensajeExito }}</div>
-  <div *ngIf="mensajeError" class="alert alert-danger">{{ mensajeError }}</div>
+  <h3>Tareas Completadas</h3>
+  <ul>
+    <li *ngFor="let tarea of tareasCompletadas">{{ tarea.titulo }}</li>
+  </ul>
 
-  <!-- Barra de progreso -->
-  <div class="progress mt-4">
-    <div
-      class="progress-bar"
-      role="progressbar"
-      [style.width.%]="progreso"
-      [attr.aria-valuenow]="progreso"
-      aria-valuemin="0"
-      aria-valuemax="100"
-    >
-      {{ progreso }}%
-    </div>
+  <h3>Tareas Pendientes</h3>
+  <ul>
+    <li *ngFor="let tarea of tareasPendientes">
+      {{ tarea.titulo }}
+      <input type="checkbox" (change)="cargarTareas()" />
+    </li>
+  </ul>
+
+  <div class="progress">
+    <div class="progress-bar" [style.width]="progreso + '%'">{{ progreso }}%</div>
   </div>
-
-  <!-- Tabla de tareas -->
-  <table class="table mt-4">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Título</th>
-        <th>Descripción</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let tarea of tareas; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ tarea.titulo }}</td>
-        <td>{{ tarea.descripcion }}</td>
-        <td>{{ tarea.estado }}</td>
-        <td>
-          <button
-            *ngIf="tarea.estado !== 'Completada'"
-            (click)="marcarCompletada(tarea.id)"
-            class="btn btn-success btn-sm"
-          >
-            Marcar Completada
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 </div>

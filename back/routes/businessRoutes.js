@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const businessController = require('../controllers/businessController');
-const verifyToken = require('../middlewares/authMiddleware'); // Middleware de autenticación
+const businessController = require('../controllers/businessController'); // Asegúrate de importar el controlador
 
-// Rutas de negocios protegidas
-router.post('/crear', verifyToken, businessController.createBusiness); // Crear negocio
-router.get('/', verifyToken, businessController.getAllBusinesses); // Obtener todos los negocios
-router.put('/actualizar/:id', verifyToken, businessController.updateBusiness); // Actualizar negocio
-router.delete('/eliminar/:id', verifyToken, businessController.deleteBusiness); // Eliminar negocio
+// Definir rutas
+router.get('/', businessController.obtenerNegocios); // Obtener todos los negocios
+router.post('/', businessController.crearNegocio); // Crear un nuevo negocio
+router.delete('/:id', businessController.eliminarNegocio); // Eliminar un negocio por ID
 
 module.exports = router;
