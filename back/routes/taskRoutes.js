@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const taskController = require('../controllers/taskController'); // Importa el controlador
+const taskController = require('../controllers/taskController');
 
-// Definir rutas
-router.post('/', taskController.crearTarea); // Crear tarea
-router.get('/:negocioId', taskController.obtenerTareasPorNegocio); // Obtener tareas por negocio
-router.delete('/:id', taskController.eliminarTarea); // Eliminar tarea
+// Obtener tareas por negocio
+router.get('/negocio/:negocioId', taskController.obtenerTareasPorNegocio);
+
+// Completar tarea
+router.patch('/:id/completar', taskController.completarTarea);
 
 module.exports = router;

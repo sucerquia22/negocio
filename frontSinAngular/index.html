@@ -35,10 +35,22 @@
     <button onclick="goBack()">Volver</button>
   </div>
 
+  <!-- User Management -->
+  <div id="user-management" class="hidden">
+    <h1>Gestión de Usuarios</h1>
+    <select id="business-select">
+      <option value="1">Negocio 1</option>
+      <option value="2">Negocio 2</option>
+      <option value="3">Negocio 3</option>
+    </select>
+    <button id="add-user-button">+</button>
+    <div id="users-container"></div>
+    <button id="user-management-back-button" onclick="goBack()">Volver</button>
+  </div>
+
   <!-- User Dashboard -->
   <div id="user-dashboard" class="hidden">
     <div id="user-info">
-      <img id="user-photo" alt="Foto del usuario" />
       <h1 id="user-name"></h1>
     </div>
     <div id="progress-container">

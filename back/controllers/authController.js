@@ -1,4 +1,4 @@
-const { Usuarios } = require('../models');
+const { Usuarios } = require('../models'); 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -22,12 +22,14 @@ exports.login = async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    res.status(200).json({ message: 'Inicio de sesión exitoso', usuario, token });
+    // Devuelve explícitamente el rol correcto
+    res.status(200).json({ message: 'Inicio de sesión exitoso', usuario: { ...usuario.toJSON(), rol: usuario.rol }, token });
   } catch (error) {
     console.error('Error en login:', error);
     res.status(500).json({ message: 'Error en el servidor', error });
   }
 };
+
 
 exports.register = async (req, res) => {
   const { nombreCompleto, nombreUsuario, contrasena, negocioId } = req.body;
@@ -40,7 +42,7 @@ exports.register = async (req, res) => {
       nombreUsuario,
       contrasena: hashedPassword,
       negocioId,
-      rol: 'personal', // Por defecto, el rol es 'personal'
+      rol: 'personal',
     });
 
     res.status(201).json({ message: 'Usuario registrado exitosamente', usuario: nuevoUsuario });

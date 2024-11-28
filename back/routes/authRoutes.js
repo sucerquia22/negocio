@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const authController = require('../controllers/authController'); // Asegúrate de que este archivo existe y exporta correctamente
+const authController = require('../controllers/authController');
 
-// Rutas de autenticación
+// Ruta para iniciar sesión
 router.post('/login', authController.login);
-router.post('/register', authController.register);
 
 module.exports = router;

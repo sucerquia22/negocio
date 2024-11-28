@@ -1,40 +1,42 @@
-const { Tareas } = require('../models'); // Asegúrate de que el modelo Tareas existe y está correctamente configurado
-
-// Crear una tarea
-exports.crearTarea = async (req, res) => {
-  const { titulo, descripcion, negocioId } = req.body;
-
-  try {
-    const nuevaTarea = await Tareas.create({ titulo, descripcion, negocioId });
-    res.status(201).json({ message: 'Tarea creada exitosamente', tarea: nuevaTarea });
-  } catch (error) {
-    console.error('Error al crear tarea:', error);
-    res.status(500).json({ message: 'Error al crear la tarea', error });
-  }
-};
+const { Tareas, Usuarios } = require('../models');
 
 // Obtener tareas por negocio
 exports.obtenerTareasPorNegocio = async (req, res) => {
   const { negocioId } = req.params;
 
   try {
-    const tareas = await Tareas.findAll({ where: { negocioId } });
-    res.status(200).json({ tareas });
+    const tareas = await Tareas.findAll({
+      where: { negocioId },
+      include: {
+        model: Usuarios,
+        attributes: ['id', 'nombreCompleto'],
+      },
+    });
+
+    res.status(200).json(tareas);
   } catch (error) {
-    console.error('Error al obtener tareas:', error);
-    res.status(500).json({ message: 'Error al obtener las tareas', error });
+    console.error('Error al obtener tareas por negocio:', error);
+    res.status(500).json({ message: 'Error al obtener tareas', error });
   }
 };
 
-// Eliminar una tarea
-exports.eliminarTarea = async (req, res) => {
+// Completar tarea
+exports.completarTarea = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await Tareas.destroy({ where: { id } });
-    res.status(200).json({ message: 'Tarea eliminada exitosamente' });
+    const tarea = await Tareas.findByPk(id);
+
+    if (!tarea) {
+      return res.status(404).json({ message: 'Tarea no encontrada' });
+    }
+
+    tarea.completada = true;
+    await tarea.save();
+
+    res.status(200).json({ message: 'Tarea completada exitosamente', tarea });
   } catch (error) {
-    console.error('Error al eliminar tarea:', error);
-    res.status(500).json({ message: 'Error al eliminar la tarea', error });
+    console.error('Error al completar tarea:', error);
+    res.status(500).json({ message: 'Error al completar tarea', error });
   }
 };

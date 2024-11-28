@@ -2,66 +2,69 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     background-color: #f4f4f9;
-}
-
-.hidden {
+  }
+  
+  .hidden {
     display: none;
-}
-
-input, button {
+  }
+  
+  button {
     margin: 10px 0;
     padding: 10px;
     font-size: 16px;
-    width: 100%;
-    max-width: 300px;
-}
-
-button {
-    cursor: pointer;
     background-color: #007bff;
     color: white;
     border: none;
+    cursor: pointer;
     transition: background-color 0.3s;
-}
-
-button:hover {
+  }
+  
+  button:hover {
     background-color: #0056b3;
-}
-
-/* Progreso */
-#progress-container {
-    margin: 20px 0;
-}
-
-#progress-bar {
+  }
+  
+  .user-row {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    gap: 10px;
+  }
+  
+  .user-row input {
+    flex: 1;
+    padding: 5px;
+    font-size: 14px;
+  }
+  
+  .user-row button {
+    padding: 5px 10px;
+    font-size: 16px;
+  }
+  
+  #progress-bar {
     width: 100%;
     height: 20px;
     background: #e0e0e0;
     border-radius: 10px;
-    overflow: hidden;
-}
-
-#progress-bar-filled {
+    margin: 20px 0;
+  }
+  
+  #progress-bar-filled {
     height: 100%;
     background: #4caf50;
     width: 0%;
     transition: width 0.3s;
-}
-
-#user-info {
+  }
+  
+  .task-item {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    margin: 20px 0;
-}
-
-#user-photo {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin-right: 20px;
-}
+    margin: 10px 0;
+  }
+  
+  .task-item input[type="checkbox"] {
+    margin-right: 10px;
+  }
+  

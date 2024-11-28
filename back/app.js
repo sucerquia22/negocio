@@ -13,6 +13,8 @@ app.use(cors({
   credentials: true,
 }));
 
+// Middleware para parsear JSON
+app.use(express.json());
 
 // Sincronizar la base de datos
 db.sequelize.sync({ force: false }).then(() => {
@@ -21,18 +23,13 @@ db.sequelize.sync({ force: false }).then(() => {
   console.error('Error al sincronizar la base de datos:', err);
 });
 
-app.use(express.json()); // Middleware para parsear JSON
-
-// Importar middleware de autenticación
-const verifyToken = require('./middlewares/authMiddleware');
-
 // Importar rutas
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const businessRoutes = require('./routes/businessRoutes');
 const userRoutes = require('./routes/userRoutes');
 
-// Rutas
+// Configuración de rutas
 app.use('/api/auth', authRoutes);
 app.use('/api/tareas', taskRoutes);
 app.use('/api/negocios', businessRoutes);
